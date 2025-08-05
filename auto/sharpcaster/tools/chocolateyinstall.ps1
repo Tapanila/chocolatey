@@ -7,13 +7,13 @@ $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $processorArch = $env:PROCESSOR_ARCHITECTURE
 
 if ($processorArch -eq "ARM64" -or $env:PROCESSOR_ARCHITEW6432 -eq "ARM64") {
-    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta5/sharpcaster-win-arm.exe'
-    $checksum64 = 'C7B38A5B0E9FD43787DB381AA813BAFFF09C35FD2AE7AEC460D57897B319DFA1' # ARM
+    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta1/sharpcaster-win-arm.exe'
+    $checksum64 = '' # ARM
     $archSuffix = 'arm64'
     Write-Host "Detected ARM64 architecture, downloading ARM64 version..." -ForegroundColor Yellow
 } else {
-    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta5/sharpcaster-win-x64.exe'
-    $checksum64 = '9B4E8D52945B4C74DC91F6AA42F7272F0A6811C2441C45A3F36C43DD4AC17F34' # x64
+    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta1/sharpcaster-win-x64.exe'
+    $checksum64 = '' # x64
     $archSuffix = 'x64'
     Write-Host "Detected x64 architecture, downloading x64 version..." -ForegroundColor Yellow
 }

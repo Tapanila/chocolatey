@@ -15,7 +15,7 @@ function global:au_GetLatest {
 
 function global:au_BeforeUpdate {
     # Get the release data again since $LatestRelease is not available here
-    $LatestRelease = Invoke-RestMethod -UseBasicParsing -Uri "https://api.github.com/repos/Tapanila/SharpCaster/releases/latest"
+    $LatestRelease = Invoke-RestMethod -UseBasicParsing -Uri "https://api.github.com/repos/Tapanila/SharpCaster/releases/tags/$($Latest.Version)"
     
     # Get ARM URL from the same release
     $armUrl = $LatestRelease.assets | Where-Object {$_.name.EndsWith("-win-arm.exe")} | Select-Object -ExpandProperty browser_download_url
@@ -37,7 +37,12 @@ function global:au_BeforeUpdate {
         Invoke-WebRequest -Uri $armUrl -OutFile $armFile -UseBasicParsing
         $Latest.ChecksumARM = (Get-FileHash $armFile -Algorithm SHA256).Hash
         $Latest.URLARM = $armUrl
-    }    
+    }
+    
+    Write-Host "x64 Checksum: $($Latest.Checksum64)" -ForegroundColor Green
+    Write-Host "ARM Checksum: $($Latest.ChecksumARM)" -ForegroundColor Green
+    Write-Host "ARM URL: $($Latest.URLARM)" -ForegroundColor Green
+    
     # Clean up
     Remove-Item $tempDir -Recurse -Force
 }
