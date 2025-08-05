@@ -8,12 +8,12 @@ $processorArch = $env:PROCESSOR_ARCHITECTURE
 
 if ($processorArch -eq "ARM64" -or $env:PROCESSOR_ARCHITEW6432 -eq "ARM64") {
     $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta1/sharpcaster-win-arm.exe'
-    $checksum64 = '' # ARM
+    $checksum64 = 'C7B38A5B0E9FD43787DB381AA813BAFFF09C35FD2AE7AEC460D57897B319DFA2' # ARM
     $archSuffix = 'arm64'
     Write-Host "Detected ARM64 architecture, downloading ARM64 version..." -ForegroundColor Yellow
 } else {
     $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0-beta1/sharpcaster-win-x64.exe'
-    $checksum64 = '' # x64
+    $checksum64 = 'C7B38A5B0E9FD43787DB381AA813BAFFF09C35FD2AE7AEC460D57897B319DFA3' # x64
     $archSuffix = 'x64'
     Write-Host "Detected x64 architecture, downloading x64 version..." -ForegroundColor Yellow
 }

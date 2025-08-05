@@ -52,8 +52,8 @@ function global:au_SearchReplace {
         ".\tools\chocolateyInstall.ps1" = @{
             "(https://github\.com/Tapanila/SharpCaster/releases/download/[^']*sharpcaster-win-x64\.exe)" = "$($Latest.URL64)"
             "(https://github\.com/Tapanila/SharpCaster/releases/download/[^']*sharpcaster-win-arm\.exe)" = "$($Latest.URLARM)"
-            "(\`$checksum64\s*=\s*')([A-F0-9]*)('.*# x64)" = "`$1$($Latest.Checksum64)`$3"
-            "(\`$checksum64\s*=\s*')([A-F0-9]*)('.*# ARM)" = "`$1$($Latest.ChecksumARM)`$3"
+            "([A-F0-9]{64}'\s*#\s*ARM)" = "$($Latest.ChecksumARM)' # ARM"
+            "([A-F0-9]{64}'\s*#\s*x64)" = "$($Latest.Checksum64)' # x64"
         }
 
         "sharpcaster.nuspec" = @{
