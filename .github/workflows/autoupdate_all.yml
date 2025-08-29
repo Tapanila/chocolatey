@@ -35,14 +35,17 @@ jobs:
         run: |
           cd auto\${{ matrix.package }}
           $UpdateOutput = .\update.ps1
+          Write-Output "Update output result:"
+          $UpdateOutput.Result | ForEach-Object { Write-Output "  $_" }
           $NupkgPath = (($UpdateOutput.Result | Where-Object {$_ -like '*.nupkg''*'}) -split "'")[1]
           Write-Output "NupkgPath=$($NupkgPath)" >> $Env:GITHUB_OUTPUT
-          $UpdateStatus = if ($UpdateOutput.Result -match 'No new version found') {'No Update'} else {'Update Available'}
+          $UpdateStatus = if ($UpdateOutput.Result -match 'No new version found' -or $UpdateOutput.Result -match 'already exists in the Chocolatey community feed') {'No Update'} else {'Update Available'}
           Write-Output "UpdateStatus=$($UpdateStatus)" >> $Env:GITHUB_OUTPUT
+          Write-Output "Detected UpdateStatus: $UpdateStatus"
 
       - name: Test ${{ matrix.package }} install
         run: Test-Package -Install -Nu ${{ steps.update.outputs.NupkgPath }}
-        if: steps.update.outputs.UpdateStatus == 'Update Available'
+        if: steps.update.outputs.UpdateStatus == 'Update Available' && steps.update.outputs.NupkgPath != ''
 
       - name: Publish to Chocolatey community feed
         run: |
@@ -50,11 +53,11 @@ jobs:
           $ApiKey = '${{ secrets.CHOCO_KEY }}'
           $ChocoServer = 'https://push.chocolatey.org/'
           choco push $Nupkg --source $ChocoServer --key $ApiKey
-        if: steps.update.outputs.UpdateStatus == 'Update Available'
+        if: steps.update.outputs.UpdateStatus == 'Update Available' && steps.update.outputs.NupkgPath != ''
 
       - name: Commit Updated nuspec
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply Choco package update - ${{ matrix.package }} ${{ steps.update.outputs.newversion }}
           file_pattern: '*.nuspec *.ps1'
-        if: steps.update.outputs.UpdateStatus == 'Update Available'
+        if: steps.update.outputs.UpdateStatus == 'Update Available' && steps.update.outputs.NupkgPath != ''
