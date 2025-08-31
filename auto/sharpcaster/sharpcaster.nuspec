@@ -3,13 +3,13 @@
   <metadata>
     <id>sharpcaster</id>
     <version>3.0.0</version>
-    <packageSourceUrl>https://github.com/Tapanila/chcolatey</packageSourceUrl>
+    <packageSourceUrl>https://github.com/Tapanila/chocolatey/tree/main/auto/sharpcaster</packageSourceUrl>
     <owners>Tapanila</owners>
     <title>SharpCaster</title>
     <authors>Tapanila</authors>
-    <projectUrl>https://github.com/Tapanila/SharpCaster</projectUrl>
+    <projectUrl>https://community.chocolatey.org/packages/sharpcaster</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/Tapanila/SharpCaster/main/Assets/sharpcaster-logo.png</iconUrl>
-    <copyright>@ 2016-PRESENT Tapanila</copyright>
+    <copyright>2016-PRESENT Tapanila</copyright>
     <licenseUrl>https://github.com/Tapanila/SharpCaster/blob/main/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/Tapanila/SharpCaster</projectSourceUrl>

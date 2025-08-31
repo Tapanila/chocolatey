@@ -3,36 +3,29 @@
 $packageName = 'sharpcaster'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-# Detect architecture and set appropriate download URL
+# Define release URLs and checksums for each architecture
+$urlX64      = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0/sharpcaster-win-x64.exe'
+$checksumX64 = 'EB995E6D1A049D08BDC4BF83B9B484419D8CE5D80D65726BADF1801F78CA16F3' # x64
+$urlARM      = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0/sharpcaster-win-arm.exe'
+$checksumARM = '2CF5895B9149642AA86E05D9FBA3A0E298D9E0C1CAD0A6258061AB775EDC68FE' # ARM
+
+# Detect architecture and choose the proper download
 $processorArch = $env:PROCESSOR_ARCHITECTURE
-
-if ($processorArch -eq "ARM64" -or $env:PROCESSOR_ARCHITEW6432 -eq "ARM64") {
-    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0/sharpcaster-win-arm.exe'
-    $checksum64 = '2CF5895B9149642AA86E05D9FBA3A0E298D9E0C1CAD0A6258061AB775EDC68FE' # ARM
-    $archSuffix = 'arm64'
-    Write-Host "Detected ARM64 architecture, downloading ARM64 version..." -ForegroundColor Yellow
+if ($processorArch -eq 'ARM64' -or $env:PROCESSOR_ARCHITEW6432 -eq 'ARM64') {
+    $downloadUrl = $urlARM
+    $checksum    = $checksumARM
+    $archSuffix  = 'arm64'
+    Write-Host 'Detected ARM64 architecture, downloading ARM64 version...' -ForegroundColor Yellow
 } else {
-    $url64bit = 'https://github.com/Tapanila/SharpCaster/releases/download/3.0.0/sharpcaster-win-x64.exe'
-    $checksum64 = 'EB995E6D1A049D08BDC4BF83B9B484419D8CE5D80D65726BADF1801F78CA16F3' # x64
-    $archSuffix = 'x64'
-    Write-Host "Detected x64 architecture, downloading x64 version..." -ForegroundColor Yellow
+    $downloadUrl = $urlX64
+    $checksum    = $checksumX64
+    $archSuffix  = 'x64'
+    Write-Host 'Detected x64 architecture, downloading x64 version...' -ForegroundColor Yellow
 }
 
-$packageArgs = @{
-  packageName   = $packageName
-  unzipLocation = $toolsDir
-  fileType      = 'exe'
-  url64bit      = $url64bit
-  softwareName  = 'sharpcaster*'
-  checksum64    = $checksum64
-  checksumType64= 'sha256'
-  silentArgs    = '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-'
-  validExitCodes= @(0)
-}
-
-# Download and install the executable
+# Download the executable with checksum validation
 $filePath = Join-Path $toolsDir 'sharpcaster.exe'
-Get-ChocolateyWebFile -PackageName $packageName -FileFullPath $filePath -Url64bit $url64bit -Checksum64 $checksum64 -ChecksumType64 $packageArgs.checksumType64
+Get-ChocolateyWebFile -PackageName $packageName -FileFullPath $filePath -Url $downloadUrl -Checksum $checksum -ChecksumType 'sha256'
 
 # Create a shim for the executable
 Install-BinFile -Name 'sharpcaster' -Path $filePath
